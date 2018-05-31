@@ -1,0 +1,4 @@
+
+version=3
+https://github.com/latchset/clevis/releases \
+    /latchset/clevis/releases/download/[^/]+/clevis-([0-9][.0-9]*)\.tar\.bz2

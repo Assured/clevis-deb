@@ -1,0 +1,4 @@
+
+usr/bin/clevis-bind-luks
+usr/bin/clevis-luks-bind
+usr/bin/clevis-luks-unlock

@@ -1,0 +1,34 @@
+Description: Use socat in clevis-luks-askpass
+Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+Date: 2017-11-28
+Forwarded: not-needed
+   
+    Upstream assumes the nc program is ncat as provided by nmap. Since
+    nmap is a fairly huge package and does not ship a separate ncat
+    package (#881639), use socat instead for the time being.
+
+    Thanks Anthony R Fletcher <arif@mail.nih.gov> for figuring out
+    and testing.
+
+--- a/src/dracut/module-setup.sh.in
++++ b/src/dracut/module-setup.sh.in
+@@ -43,7 +43,7 @@
+         clevis \
+         curl \
+         jose \
+-        nc
++        socat
+ 
+     dracut_need_initqueue
+ }
+--- a/src/systemd/clevis-luks-askpass
++++ b/src/systemd/clevis-luks-askpass
+@@ -41,7 +41,7 @@
+         [ "$uuid" != "$UUID" ] && continue
+ 
+         if pt="`luksmeta load -d $d -s $slot -u $UUID | clevis decrypt`"; then
+-            echo -n "+$pt" | nc -U -u --send-only "$s"
++            echo -n "+$pt" | socat -U "UNIX:$s" -
+             break
+         fi
+     done

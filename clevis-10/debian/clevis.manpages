@@ -1,0 +1,6 @@
+
+debian/tmp/usr/share/man/man1/clevis-decrypt.1
+debian/tmp/usr/share/man/man1/clevis-encrypt-http.1
+debian/tmp/usr/share/man/man1/clevis-encrypt-sss.1
+debian/tmp/usr/share/man/man1/clevis-encrypt-tang.1
+debian/tmp/usr/share/man/man1/clevis.1

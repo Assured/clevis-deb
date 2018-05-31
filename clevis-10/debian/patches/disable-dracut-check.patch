@@ -1,0 +1,20 @@
+Description: Disable configure check for dracut
+Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+Date: 2017-11-06
+Forwarded: not-needed
+
+    The dracut package does not provide dracut.pc, so this check would
+    always fail.
+
+    See also: https://bugs.debian.org/880984
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -17,7 +17,6 @@
+ PKG_CHECK_MODULES([udisks2], [udisks2])
+ PKG_CHECK_MODULES([jose], [jose >= 8])
+ PKG_CHECK_MODULES([systemd], [systemd])
+-PKG_CHECK_MODULES([dracut], [dracut])
+ PKG_CHECK_MODULES([audit], [audit >= 2.7.8])
+ 
+ AC_CHECK_PROG([PWMAKE], [pwmake], [yes])
