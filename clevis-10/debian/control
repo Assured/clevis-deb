@@ -1,5 +1,5 @@
 Source: clevis
-Maintainer: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+Maintainer: blaufish <blaufish@users.noreply.github.com>
 Homepage: https://github.com/latchset/clevis
 Standards-Version: 4.1.1
 Build-Depends: debhelper (>= 10~),

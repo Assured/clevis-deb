@@ -1,0 +1,39 @@
+diff --git a/src/clevis b/src/clevis
+index 444868d..b80abb9 100755
+--- a/src/clevis
++++ b/src/clevis
+@@ -53,3 +53,5 @@ for f in $0-*; do
+ done
+ 
+ echo >&2
++
++exit 1
+diff --git a/src/clevis-decrypt-http b/src/clevis-decrypt-http
+index 61a8e45..d689e7f 100755
+--- a/src/clevis-decrypt-http
++++ b/src/clevis-decrypt-http
+@@ -51,7 +51,7 @@ fi
+ 
+ case $typ in
+ application/jwk+json)
+-    if ! rep=`curl -sfg -H "Accept: $typ" "$url" \
++    if ! jwk=`curl -sfg -H "Accept: $typ" "$url" \
+             | jose fmt -j- -Og kty -q oct -EUUo-`; then
+         echo "Key transfer failed!" >&2
+         exit 1
+diff --git a/tests/pin-http b/tests/pin-http
+index 5d49491..d391c30 100755
+--- a/tests/pin-http
++++ b/tests/pin-http
+@@ -23,6 +23,11 @@ e=`echo -n hi | clevis encrypt http "$cfg"`
+ d=`echo -n "$e" | clevis decrypt`
+ test "$d" == "hi"
+ 
++cfg=`jose fmt -j "$cfg" -Oj '"jwk+json"' -s type -U -Oo-`
++e=`echo -n ho | clevis encrypt http "$cfg"`
++d=`echo -n "$e" | clevis decrypt`
++test "$d" == "ho"
++
+ kill $PID
+ ! wait $PID
+ 

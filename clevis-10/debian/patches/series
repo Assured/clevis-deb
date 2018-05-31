@@ -1,5 +1,3 @@
-cherry-pick.v8-1-g69524aa.fix-typo-in-libaudit-requirement.patch
-test-exec-path.patch
-disable-dracut-check.patch
-fix-manpage-add-name.patch
-use-socat.patch
+clevis_v10_cb98246.patch
+clevis-luks-askpass.patch
+clevis-initramfs.debian-stripped.patch

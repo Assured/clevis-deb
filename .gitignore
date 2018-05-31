@@ -1,0 +1,17 @@
+clevis-10/debian/.debhelper/
+clevis-10/debian/clevis-dracut.debhelper.log
+clevis-10/debian/clevis-dracut.substvars
+clevis-10/debian/clevis-dracut/
+clevis-10/debian/clevis-luks.debhelper.log
+clevis-10/debian/clevis-luks.substvars
+clevis-10/debian/clevis-luks/
+clevis-10/debian/clevis-systemd.debhelper.log
+clevis-10/debian/clevis-systemd.substvars
+clevis-10/debian/clevis-systemd/
+clevis-10/debian/clevis-udisks2.debhelper.log
+clevis-10/debian/clevis-udisks2.substvars
+clevis-10/debian/clevis-udisks2/
+clevis-10/debian/clevis.debhelper.log
+clevis-10/debian/clevis.substvars
+clevis-10/debian/clevis/
+clevis-10/debian/debhelper-build-stamp

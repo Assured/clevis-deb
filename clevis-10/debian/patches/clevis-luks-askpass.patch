@@ -1,0 +1,19 @@
+commit 08c4e92bc959afc181675f763719bec3b1376fe8
+Author: blaufish <blaufish@users.noreply.github.com>
+Date:   Wed May 9 09:29:03 2018 +0200
+
+    nc command line change for ubuntu compatibility
+
+diff --git a/src/systemd/clevis-luks-askpass b/src/systemd/clevis-luks-askpass
+index 93c59f4..d60e1d4 100755
+--- a/src/systemd/clevis-luks-askpass
++++ b/src/systemd/clevis-luks-askpass
+@@ -56,7 +56,7 @@ while true; do
+             metadata=true
+ 
+             if pt="`luksmeta load -d $d -s $slot -u $UUID | clevis decrypt`"; then
+-                echo -n "+$pt" | nc -U -u --send-only "$s"
++                echo -n "+$pt" | nc -U -u -w2 "$s"
+                 unlocked=true
+                 break
+             fi

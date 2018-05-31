@@ -1,5 +1,6 @@
-clevis (8-1) unstable; urgency=medium
+clevis (10-1) unstable; urgency=medium
 
-  * Initial release. Closes: #854410
+  * Clevis 10 Prototype package.
+  * Derived from clevis (8-1) package by Christoph Biedl, multiple changes though.
 
- -- Christoph Biedl <debian.axhn@manchmal.in-ulm.de>  Wed, 29 Nov 2017 00:01:49 +0100
+ -- blaufish <blaufish@users.noreply.github.com>  Thu, 31 May 2018 10:27:47 +0200

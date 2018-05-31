@@ -1,0 +1,348 @@
+commit dac0f4f8fcdac737f1f4fcb3de88580da95c46f1
+Author: ShaRose <ShaRose@Local.Rose.Network>
+Date:   Tue Jun 20 16:29:46 2017 -0230
+
+    Added initramfs-tools hook and script
+    
+    Added ports to initramfs-tools based systems.
+    
+    * src/initramfs-tools/hooks/clevis.in: New file.
+    * src/initramfs-tools/scripts/local-bottom/clevis.in: New file.
+    * src/initramfs-tools/scripts/local-top/clevis.in: New file.
+    * src/initramfs-tools/Makefile.am: New file.
+    * configure.ac: Add option to set where dracut or initramfs-tools
+      is located.
+    * src/Makefile.am (SUBDIRS): Add new directory.
+    * Makefile.am (DISTCHECK_CONFIGURE_FLAGS) Add initramfs option.
+    
+    Co-authored-by: Manolis Ragkousis <manolis837@gmail.com>
+    Signed-off-by: Manolis Ragkousis <manolis837@gmail.com>
+    
+    initramfs-tools: Update hook to include tpm2 pin.
+    
+    * src/initramfs-tools/hooks/clevis.in: Add tpm2 tools.
+    
+    Signed-off-by: Manolis Ragkousis <manolis837@gmail.com>
+    
+    Add initramfs instructions.
+    
+    * README.md: Add how to use clevis with a system using initramfs.
+    
+    Signed-off-by: Manolis Ragkousis <manolis837@gmail.com>
+
+diff --git a/configure.ac b/configure.ac
+index a7a7184..1fe66c3 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -17,18 +17,36 @@ PKG_CHECK_MODULES([jansson], [jansson >= 2.10])
+ PKG_CHECK_MODULES([udisks2], [udisks2])
+ PKG_CHECK_MODULES([jose], [jose >= 8])
+ PKG_CHECK_MODULES([systemd], [systemd])
+-PKG_CHECK_MODULES([dracut], [dracut])
+ PKG_CHECK_MODULES([audit], [audit >= 2.7.8])
+ 
++AC_DEFUN(AC_PROG_DRACUT, [AC_CHECK_PROG([DRACUT], [dracut], [yes])])
++AC_DEFUN(AC_PROG_INITRAMFS_TOOLS, [AC_CHECK_PROG([INITRAMFS_TOOLS], [update-initramfs], [yes])])
++
++AC_PROG_DRACUT
++if test x"${DRACUT}" == x"yes" ; then
++    AC_ARG_WITH([dracutmodulesdir],
++            [AS_HELP_STRING([--with-dracutmodulesdir=DIR], [Directory for dracut modules])],
++            [],
++            [with_dracutmodulesdir=$($PKG_CONFIG --variable=dracutmodulesdir dracut)])
++    AC_SUBST([dracutmodulesdir], [$with_dracutmodulesdir])
++fi
++
++AC_PROG_INITRAMFS_TOOLS
++if test x"${INITRAMFS_TOOLS}" == x"yes" ; then
++    AC_ARG_WITH([initramfstoolsmodulesdir],
++            [AS_HELP_STRING([--with-initramfstoolsmodulesdir=DIR], [Directory for initramfs-tools modules])],
++            [],
++            [with_initramfstoolsmodulesdir=$initramfstoolsmodulesdir])
++    AC_SUBST([initramfstoolsmodulesdir], [$with_initramfstoolsmodulesdir])
++fi
++
++if test -z "${INITRAMFS_TOOLS}" && test -z "${DRACUT}" ; then
++    AC_MSG_ERROR([Please install dracut or initramfs-tools.])
++fi
++
+ AC_CHECK_PROG([PWMAKE], [pwmake], [yes])
+ test -n "$PWMAKE" || AC_MSG_ERROR([pwmake required!])
+ 
+-AC_ARG_WITH([dracutmodulesdir],
+-	    [AS_HELP_STRING([--with-dracutmodulesdir=DIR], [Directory for dracut modules])],
+-	    [],
+-	    [with_dracutmodulesdir=$($PKG_CONFIG --variable=dracutmodulesdir dracut)])
+-AC_SUBST([dracutmodulesdir], [$with_dracutmodulesdir])
+-
+ AC_ARG_WITH([systemdsystemunitdir],
+             [AS_HELP_STRING([--with-systemdsystemunitdir=DIR], [Directory for systemd unit files])],
+             [],
+@@ -102,6 +120,7 @@ AC_CONFIG_FILES([
+     src/systemd/Makefile
+     src/udisks2/Makefile
+     src/dracut/Makefile
++    src/initramfs-tools/Makefile
+     tests/Makefile
+     src/Makefile
+     Makefile
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 3c26d35..6bdc4b4 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS=dracut systemd udisks2 .
++SUBDIRS=dracut initramfs-tools systemd udisks2 .
+ 
+ AM_CFLAGS = \
+     @CLEVIS_CFLAGS@ \
+diff --git a/src/initramfs-tools/Makefile.am b/src/initramfs-tools/Makefile.am
+new file mode 100644
+index 0000000..83e127f
+--- /dev/null
++++ b/src/initramfs-tools/Makefile.am
+@@ -0,0 +1,18 @@
++initramfstoolsdir = @initramfstoolsmodulesdir@
++nodist_initramfstools_SCRIPTS = hooks/clevis scripts/local-bottom/clevis \
++	scripts/local-top/clevis
++EXTRA_DIST=hooks/clevis.in scripts/local-bottom/clevis.in scripts/local-top/clevis.in
++CLEANFILES=hooks/clevis scripts/local-bottom/clevis scripts/local-top/clevis
++
++%: %.in
++	$(AM_V_GEN)mkdir -p $(dir $@)
++	$(AM_V_GEN)$(SED) \
++		-e 's,@initramfstoolsdir@,$(initramfstoolsdir),g' \
++		-e 's,@bindir\@,$(bindir),g' \
++		$(srcdir)/$@.in > $@
++
++install-nodist_initramfstoolsSCRIPTS:
++	$(AM_V_GEN)mkdir -p $(initramfstoolsdir)
++	for i in $(nodist_initramfstools_SCRIPTS); do      \
++		$(install_sh) -c -m 555 $$i $(initramfstoolsdir)/$$i;    \
++	done
+diff --git a/src/initramfs-tools/hooks/clevis.in b/src/initramfs-tools/hooks/clevis.in
+new file mode 100644
+index 0000000..784f41f
+--- /dev/null
++++ b/src/initramfs-tools/hooks/clevis.in
+@@ -0,0 +1,42 @@
++#!/bin/bash
++#
++# Copyright (c) 2017 Shawn Rose
++# Author: Shawn Rose <shawnandrewrose@gmail.com>
++#
++# This program is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation, either version 3 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++#
++
++case $1 in
++prereqs) exit 0;;
++esac
++
++. @initramfstoolsdir@/hook-functions
++
++copy_exec @bindir@/clevis-decrypt-http
++copy_exec @bindir@/clevis-decrypt-tang
++copy_exec @bindir@/clevis-decrypt-sss
++copy_exec @bindir@/clevis-decrypt
++if [ -x @bindir@/clevis-decrypt-tpm2 ]; then
++    copy_exec @bindir@/clevis-decrypt-tpm2
++fi
++if [ -x @bindir@/tpm2_createprimary ]; then
++    copy_exec @bindir@/tpm2_createprimary
++    copy_exec @bindir@/tpm2_unseal
++    copy_exec @bindir@/tpm2_load
++fi
++copy_exec @bindir@/luksmeta
++copy_exec @bindir@/clevis
++copy_exec @bindir@/jose
++copy_exec /usr/bin/curl
++copy_exec /bin/bash
+diff --git a/src/initramfs-tools/scripts/local-bottom/clevis.in b/src/initramfs-tools/scripts/local-bottom/clevis.in
+new file mode 100644
+index 0000000..2d3a20c
+--- /dev/null
++++ b/src/initramfs-tools/scripts/local-bottom/clevis.in
+@@ -0,0 +1,47 @@
++#!/bin/sh
++#
++# Copyright (c) 2017 Shawn Rose
++#
++# Author: Shawn Rose <shawnandrewrose@gmail.com>
++#
++# This program is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation, either version 3 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++#
++
++PREREQ=""
++
++prereqs() {
++    echo "$PREREQ"
++}
++
++case "$1" in
++    prereqs)
++        prereqs
++        exit 0
++    ;;
++esac
++
++[ -s /run/clevis.pid ] || exit 0
++
++pid=$(cat /run/clevis.pid)
++ps -l | awk -v pid=$pid '$4==pid { system("kill " $3) }'
++kill $pid
++
++# Not really worried about downing extra interfaces: they will come up
++# during the actual boot. Might make this configurable later if needed.
++
++for iface in $(ls /sys/class/net/) ; do
++    ip link  set   dev "$iface" down
++    ip addr  flush dev "$iface"
++    ip route flush dev "$iface"
++done
+diff --git a/src/initramfs-tools/scripts/local-top/clevis.in b/src/initramfs-tools/scripts/local-top/clevis.in
+new file mode 100644
+index 0000000..40364f5
+--- /dev/null
++++ b/src/initramfs-tools/scripts/local-top/clevis.in
+@@ -0,0 +1,118 @@
++#!/bin/bash
++#
++# Copyright (c) 2017 Red Hat, Inc.
++# Copyright (c) 2017 Shawn Rose
++# Copyright (c) 2017 Guilhem Moulin
++#
++# Author: Harald Hoyer <harald@redhat.com>
++# Author: Nathaniel McCallum <npmccallum@redhat.com>
++# Author: Shawn Rose <shawnandrewrose@gmail.com>
++# Author: Guilhem Moulin <guilhem@guilhem.org>
++#
++# This program is free software: you can redistribute it and/or modify
++# it under the terms of the GNU General Public License as published by
++# the Free Software Foundation, either version 3 of the License, or
++# (at your option) any later version.
++#
++# This program is distributed in the hope that it will be useful,
++# but WITHOUT ANY WARRANTY; without even the implied warranty of
++# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
++# GNU General Public License for more details.
++#
++# You should have received a copy of the GNU General Public License
++# along with this program.  If not, see <http://www.gnu.org/licenses/>.
++#
++
++case $1 in
++prereqs) exit 0;;
++esac
++
++# Return 0 if $pid has a file descriptor pointing to $name, 1 otherwise
++in_fds() {
++    local  pid="$1" name="$2" fd
++    for fd in $(find "/proc/$pid/fd" -type l); do
++        [ "$(readlink -f "$fd")" != "$name" ] || return 0
++    done
++    return 1
++}
++
++# Print the PID of the askpass process with a file descriptor opened to
++# /lib/cryptsetup/passfifo if there is one.
++get_askpass_pid() {
++    psinfo=$(ps) # Doing this so I don't end up matching myself
++    echo "$psinfo" | awk "/$cryptkeyscript/ { print \$1 }" | \
++        while read pid; do
++        if in_fds "$pid" "$PASSFIFO"; then
++            echo "$pid"
++            break
++        fi
++    done
++}
++
++# Wait for askpass, and then try and decrypt immediately. Just in case
++# there are multiple devices that need decrypting, this will loop
++# infinitely (The local-bottom script will kill this after decryption)
++clevisloop()
++{
++    set -e
++
++    # Set the path how we want it (Probably not all needed)
++    PATH="/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/bin"
++
++    if [ -x /bin/plymouth ] && plymouth --ping; then
++        cryptkeyscript='plymouth ask-for-password'
++    else
++        # This has to be escaped for awk
++        cryptkeyscript='\/lib\/cryptsetup\/askpass'
++    fi
++
++    PASSFIFO='/lib/cryptsetup/passfifo'
++
++    OLD_CRYPTTAB_SOURCE=""
++
++    while true; do
++
++        pid=$(get_askpass_pid)
++
++        until [ "$pid" ] && [ -p "$PASSFIFO" ]; do
++            sleep .1
++            pid=$(get_askpass_pid)
++        done
++
++        # Import CRYPTTAB_SOURCE from the askpass process.
++        local $(grep '^CRYPTTAB_SOURCE=' /proc/$pid/environ)
++
++        # Make sure that CRYPTTAB_SOURCE is actually a block device
++        [ ! -b "$CRYPTTAB_SOURCE" ] && continue
++
++        # Make the source has changed if needed
++        [ "$CRYPTTAB_SOURCE" == "$OLD_CRYPTTAB_SOURCE" ] && continue
++
++        OLD_CRYPTTAB_SOURCE="$CRYPTTAB_SOURCE"
++
++        UUID=cb6e8904-81ff-40da-a84a-07ab9ab5715e
++        luksmeta show -d "$CRYPTTAB_SOURCE" | \
++            while read -r slot state uuid; do
++
++            [ "$state" != "active" ] && continue
++            [ "$uuid" != "$UUID" ] && continue
++            luksmeta load -d "$CRYPTTAB_SOURCE" -s $slot -u $UUID | \
++                clevis decrypt > $PASSFIFO
++            break
++        done
++
++        # Now that the current device has its password, let's sleep a
++        # bit. This gives cryptsetup time to actually decrypt the
++        # device and prompt for the next password if needed.
++        sleep .5
++    done
++}
++
++. /scripts/functions
++
++# Make sure networking is set up: if booting via nfs, it already is
++# Doesn't seem to work when added to clevisloop for some reason
++[ "$boot" = nfs ] || configure_networking
++
++clevisloop &
++echo $! > /run/clevis.pid
+\ No newline at end of file
