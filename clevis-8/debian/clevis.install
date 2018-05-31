@@ -1,9 +1,0 @@
-
-usr/bin/clevis
-usr/bin/clevis-decrypt
-usr/bin/clevis-decrypt-http
-usr/bin/clevis-decrypt-sss
-usr/bin/clevis-decrypt-tang
-usr/bin/clevis-encrypt-http
-usr/bin/clevis-encrypt-sss
-usr/bin/clevis-encrypt-tang
