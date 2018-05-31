@@ -1,3 +1,8 @@
+Description: cherry-pick some patches
+Author: blaufish <blaufish@users.noreply.github.com>
+Forwarded: not-needed
+Last-Update: 2018-05-31
+
 diff --git a/src/clevis b/src/clevis
 index 444868d..b80abb9 100755
 --- a/src/clevis

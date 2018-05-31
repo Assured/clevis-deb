@@ -1,8 +1,7 @@
-commit 08c4e92bc959afc181675f763719bec3b1376fe8
+Description: nc command line change for ubuntu compatibility
 Author: blaufish <blaufish@users.noreply.github.com>
-Date:   Wed May 9 09:29:03 2018 +0200
-
-    nc command line change for ubuntu compatibility
+Forwarded: not-needed
+Last-Update: 2018-05-31
 
 diff --git a/src/systemd/clevis-luks-askpass b/src/systemd/clevis-luks-askpass
 index 93c59f4..d60e1d4 100755

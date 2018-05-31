@@ -1,34 +1,7 @@
-commit dac0f4f8fcdac737f1f4fcb3de88580da95c46f1
+Description: Added initramfs-tools hook and script
 Author: ShaRose <ShaRose@Local.Rose.Network>
-Date:   Tue Jun 20 16:29:46 2017 -0230
-
-    Added initramfs-tools hook and script
-    
-    Added ports to initramfs-tools based systems.
-    
-    * src/initramfs-tools/hooks/clevis.in: New file.
-    * src/initramfs-tools/scripts/local-bottom/clevis.in: New file.
-    * src/initramfs-tools/scripts/local-top/clevis.in: New file.
-    * src/initramfs-tools/Makefile.am: New file.
-    * configure.ac: Add option to set where dracut or initramfs-tools
-      is located.
-    * src/Makefile.am (SUBDIRS): Add new directory.
-    * Makefile.am (DISTCHECK_CONFIGURE_FLAGS) Add initramfs option.
-    
-    Co-authored-by: Manolis Ragkousis <manolis837@gmail.com>
-    Signed-off-by: Manolis Ragkousis <manolis837@gmail.com>
-    
-    initramfs-tools: Update hook to include tpm2 pin.
-    
-    * src/initramfs-tools/hooks/clevis.in: Add tpm2 tools.
-    
-    Signed-off-by: Manolis Ragkousis <manolis837@gmail.com>
-    
-    Add initramfs instructions.
-    
-    * README.md: Add how to use clevis with a system using initramfs.
-    
-    Signed-off-by: Manolis Ragkousis <manolis837@gmail.com>
+Forwarded: not-needed
+Last-Update: 2018-05-31
 
 diff --git a/configure.ac b/configure.ac
 index a7a7184..1fe66c3 100644
