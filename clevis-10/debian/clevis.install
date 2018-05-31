@@ -7,3 +7,5 @@ usr/bin/clevis-decrypt-tang
 usr/bin/clevis-encrypt-http
 usr/bin/clevis-encrypt-sss
 usr/bin/clevis-encrypt-tang
+usr/bin/clevis-decrypt-tpm2
+usr/bin/clevis-encrypt-tpm2
