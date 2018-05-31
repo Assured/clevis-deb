@@ -1,3 +1,4 @@
+*.sw?
 clevis-10/debian/.debhelper/
 clevis-10/debian/clevis-dracut.debhelper.log
 clevis-10/debian/clevis-dracut.substvars
