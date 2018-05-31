@@ -13,3 +13,9 @@ override_dh_auto_configure:
 
 override_dh_missing:
 	dh_missing --fail-missing
+
+override_dh_auto_install:
+	mkdir -p $(CURDIR)/debian/tmp/usr/share/initramfs-tools/hooks/
+	mkdir -p $(CURDIR)/debian/tmp/usr/share/initramfs-tools/scripts/local-bottom/
+	mkdir -p $(CURDIR)/debian/tmp/usr/share/initramfs-tools/scripts/local-top/
+	make -j8 install DESTDIR=$(CURDIR)/debian/tmp AM_UPDATE_INFO_DIR=no
