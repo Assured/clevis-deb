@@ -23,7 +23,6 @@ build:
  autom4te.cache/ config.status   COPYING         install-sh      missing         tests\
  compile         config.sub      Makefile        .pc             config.guess    configure\
  depcomp         Makefile.am     src
-	#tar xvf clevis_10.orig.tar.bz2 clevis-10
-	#cd clevis-10 && dpkg-source --commit
-	cd clevis-10 && quilt pop -a -f
+	-cd clevis-10 && quilt pop -a -f
+	tar xvf clevis_10.orig.tar.bz2 clevis-10
 	cd clevis-10 && DEB_BUILD_OPTIONS="nocheck" dpkg-buildpackage -us -uc -d
