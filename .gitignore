@@ -4,6 +4,9 @@ clevis-10/debian/.debhelper/
 clevis-10/debian/clevis-dracut.debhelper.log
 clevis-10/debian/clevis-dracut.substvars
 clevis-10/debian/clevis-dracut/
+clevis-10/debian/clevis-initramfs.debhelper.log
+clevis-10/debian/clevis-initramfs.substvars
+clevis-10/debian/clevis-initramfs/
 clevis-10/debian/clevis-luks.debhelper.log
 clevis-10/debian/clevis-luks.substvars
 clevis-10/debian/clevis-luks/
