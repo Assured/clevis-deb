@@ -76,3 +76,11 @@ Description: UDisks2/Storaged integration for clevis
  Clevis is a plugable framework for automated decryption. This package
  provides automatic unlocking LUKSv1 block devices in desktop
  environments that use UDisks2 or storaged.
+
+Package: clevis-initramfs
+Architecture: linux-any
+Depends: ${misc:Depends}, ${shlibs:Depends},
+Description:  integration for clevis
+ Clevis is a plugable framework for automated decryption. This package
+ provides integration for the initramfs to automatically unlock
+ LUKSv1 block devices in early boot.

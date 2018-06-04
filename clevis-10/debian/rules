@@ -7,9 +7,9 @@ include /usr/share/dpkg/buildflags.mk
 %:
 	dh $@
 
-# wait for #880984
 override_dh_auto_configure:
-	dh_auto_configure -- --with-dracutmodulesdir=/usr/lib/dracut/modules.d --with-initramfstoolsmodulesdir=/usr/share/initramfs-tools
+	dh_auto_configure -- --with-dracutmodulesdir=/usr/lib/dracut/modules.d \
+ --with-initramfstoolsmodulesdir=$(CURDIR)/debian/tmp/usr/share/initramfs-tools
 
 override_dh_missing:
 	dh_missing --fail-missing
