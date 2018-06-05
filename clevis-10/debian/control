@@ -64,7 +64,7 @@ Package: clevis-systemd
 Architecture: linux-any
 Depends: ${misc:Depends},
     clevis-luks,
-    nc,
+    netcat-openbsd,
 #    socat,
     systemd,
 Description: systemd integration for clevis
