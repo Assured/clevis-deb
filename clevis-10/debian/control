@@ -4,7 +4,7 @@ Homepage: https://github.com/latchset/clevis
 Standards-Version: 4.1.1
 Build-Depends: debhelper (>= 10~),
     curl,
-    dracut,
+#    dracut,
     jose,
     libaudit-dev (>= 1:2.7.8),
     libglib2.0-dev,
@@ -14,6 +14,7 @@ Build-Depends: debhelper (>= 10~),
     libpwquality-tools,
     libssl-dev,
     libudisks2-dev,
+    tpm2-tools (= 3.0.4-1),
     pkg-config,
     systemd,
     tang,
@@ -28,6 +29,7 @@ Depends: ${misc:Depends}, ${shlibs:Depends},
     jose,
     libpwquality-tools,
     luksmeta,
+    tpm2-tools (= 3.0.4-1),
 Recommends:
     cryptsetup,
 Description: automated encryption framework
@@ -41,7 +43,7 @@ Package: clevis-dracut
 Architecture: all
 Depends: ${misc:Depends},
     clevis-systemd,
-    dracut-network,
+#    dracut-network,
 Description: Dracut integration for clevis
  Clevis is a plugable framework for automated decryption. This package
  provides integration for the dracut initramfs to automatically unlock
@@ -62,7 +64,8 @@ Package: clevis-systemd
 Architecture: linux-any
 Depends: ${misc:Depends},
     clevis-luks,
-    socat,
+    nc,
+#    socat,
     systemd,
 Description: systemd integration for clevis
  Clevis is a plugable framework for automated decryption. This package
@@ -80,6 +83,7 @@ Description: UDisks2/Storaged integration for clevis
 Package: clevis-initramfs
 Architecture: linux-any
 Depends: ${misc:Depends}, ${shlibs:Depends},
+    clevis-luks,
 Description:  integration for clevis
  Clevis is a plugable framework for automated decryption. This package
  provides integration for the initramfs to automatically unlock
