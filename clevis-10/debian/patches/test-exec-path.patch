@@ -1,0 +1,23 @@
+Description: Fix path to tangd-* executables in test suite
+Author: Christoph Biedl <debian.axhn@manchmal.in-ulm.de>
+Date: 2017-11-06
+Forwarded: not-needed
+
+--- a/tests/pin-tang
++++ b/tests/pin-tang
+@@ -31,12 +31,12 @@
+ mkdir -p $TMP/cache
+ 
+ # Generate the server keys
+-/usr/libexec/tangd-keygen $TMP/db sig exc
+-/usr/libexec/tangd-update $TMP/db $TMP/cache
++/usr/lib/${DEB_HOST_MULTIARCH}/tangd-keygen $TMP/db sig exc
++/usr/lib/${DEB_HOST_MULTIARCH}/tangd-update $TMP/db $TMP/cache
+ 
+ # Start the server
+ port=`shuf -i 1024-65536 -n 1`
+-$SD_ACTIVATE -l 127.0.0.1:$port -a /usr/libexec/tangd $TMP/cache &
++$SD_ACTIVATE -l 127.0.0.1:$port -a /usr/lib/${DEB_HOST_MULTIARCH}/tangd $TMP/cache &
+ export PID=$!
+ sleep 0.25
+ 

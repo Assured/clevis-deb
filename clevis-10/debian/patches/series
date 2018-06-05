@@ -1,3 +1,4 @@
 clevis_v10_cb98246.patch
 clevis-luks-askpass.patch
 clevis-initramfs.debian-stripped.patch
+test-exec-path.patch
