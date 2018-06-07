@@ -1,3 +1,4 @@
+build*.mk
 *.sw?
 clevis-8
 clevis-10/debian/.debhelper/
@@ -48,3 +49,14 @@ clevis-10/src/
 clevis-10/test-driver
 clevis-10/tests/
 clevis-10/.pc/
+clevis-dracut_10-1_all.deb
+clevis-luks_10-1_all.deb
+clevis-systemd_10-1_amd64.deb
+clevis-udisks2_10-1_amd64.deb
+clevis_10-1.debian.tar.xz
+clevis_10-1.dsc
+clevis_10-1_amd64.build
+clevis_10-1_amd64.buildinfo
+clevis_10-1_amd64.changes
+clevis_10-1_amd64.deb
+clevis-release-deb-*.tar.gz
