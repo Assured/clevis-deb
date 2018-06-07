@@ -49,7 +49,10 @@ clevis-10/src/
 clevis-10/test-driver
 clevis-10/tests/
 clevis-10/.pc/
+clevis-dbgsym_10-1_amd64.ddeb
+clevis-udisks2-dbgsym_10-1_amd64.ddeb
 clevis-dracut_10-1_all.deb
+clevis-initramfs_10-1_amd64.deb
 clevis-luks_10-1_all.deb
 clevis-systemd_10-1_amd64.deb
 clevis-udisks2_10-1_amd64.deb
