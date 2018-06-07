@@ -1,0 +1,7 @@
+src/clevis-decrypt-sss
+src/clevis-decrypt-sss.o
+src/clevis-encrypt-sss
+src/clevis-encrypt-sss.o
+src/sss.o
+src/udisks2/clevis-luks-udisks2
+src/udisks2/clevis-luks-udisks2.o
