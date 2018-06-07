@@ -39,15 +39,15 @@ Description: automated encryption framework
  .
  It supports tang, shamir secret sharing, escrow using HTTP.
 
-Package: clevis-dracut
-Architecture: all
-Depends: ${misc:Depends},
-    clevis-systemd,
+#Package: clevis-dracut
+#Architecture: all
+#Depends: ${misc:Depends},
+#    clevis-systemd,
 #    dracut-network,
-Description: Dracut integration for clevis
- Clevis is a plugable framework for automated decryption. This package
- provides integration for the dracut initramfs to automatically unlock
- LUKSv1 block devices in early boot.
+#Description: Dracut integration for clevis
+# Clevis is a plugable framework for automated decryption. This package
+# provides integration for the dracut initramfs to automatically unlock
+# LUKSv1 block devices in early boot.
 
 Package: clevis-luks
 Architecture: all
