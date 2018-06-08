@@ -16,6 +16,7 @@ override_dh_missing:
 	rm $(CURDIR)/debian/tmp/60clevis/module-setup.sh
 	rm $(CURDIR)/debian/tmp/60clevis/clevis-hook.sh
 	dh_missing --fail-missing
+	sed -i 's|$(CURDIR)/debian/tmp||g' $(CURDIR)/debian/tmp/usr/share/initramfs-tools/hooks/clevis
 
 override_dh_auto_install:
 	mkdir -p $(CURDIR)/debian/tmp/usr/lib/dracut/modules.d
